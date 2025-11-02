@@ -1,5 +1,6 @@
 package com.pluralsight;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -59,6 +60,8 @@ public class UserInterface {
                 case "9":
                     processRemoveVehicleRequest();
                     break;
+                case "0":
+                    processSaleLeaseContact();
                 case "99":
                     quit = true;
                     break;
@@ -183,6 +186,58 @@ public class UserInterface {
         manager.saveDealership(dealership);
     }
 
+    public void processSaleLeaseContact() {
+
+        System.out.println("Enter VIN (0 to exit): ");
+        int vin = scanner.nextInt();
+        if (vin == 0) return;
+        scanner.nextLine();
+
+        Vehicle lease = dealership.filterVehicleByVin(vin);
+        if (lease == null) {
+            System.out.println("Vehicle not found.");
+            return;
+        }
+
+        System.out.println("Sell or Lease? (S/L): ");
+        String type = scanner.nextLine();
+
+        System.out.println("Enter date (YYYYMMDD): ");
+        String date = scanner.nextLine();
+
+        System.out.println("Enter name: ");
+        String name = scanner.nextLine();
+
+        System.out.println("Enter email: ");
+        String email = scanner.nextLine();
+
+        ContractDataManager DataFile = new ContractDataManager();
+
+        if (type.equalsIgnoreCase("S")) {
+            System.out.println("Finance? (Y/N): ");
+            String Finance = scanner.nextLine();
+            boolean finance = Finance.equalsIgnoreCase("Y");
+
+            DataFile.saveContract(new SalesContract(date, name, email, lease, finance));
+            dealership.removeVehicle(lease);
+            System.out.println("Sold successfully.");
+        } else if (type.equalsIgnoreCase("L")) {
+            LocalDate now = LocalDate.now();
+            if (now.getYear() - lease.getYear() > 3) {
+                System.out.println("Cannot lease cars older than 3 years.");
+                return;
+            }
+            double endValue = lease.getPrice() * 0.5;
+            double fee = lease.getPrice() * 0.07;
+            DataFile.saveContract(new LeaseContract(date, name, email, lease, endValue, fee));
+            dealership.removeVehicle(lease);
+            System.out.println("Leased successfully.");
+        } else {
+            System.out.println("Invalid option.");
+        }
+    }
+
+
     private void init() {
         DealershipFileManager manager = new DealershipFileManager();
         dealership = manager.getDealership();
@@ -192,6 +247,7 @@ public class UserInterface {
         for (Vehicle vehicle : vehicles) {
             System.out.println(vehicle.toString());
         }
-    }
 
+
+    }
 }

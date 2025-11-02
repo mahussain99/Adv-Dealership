@@ -15,6 +15,7 @@ public class ContractDataManager {
                 writer.write("SALE|" + contract.getContractDate() + "|" + contract.getCustomerName() + "|" + contract.getCustomerEmail() + "|" + contract.getvehicleSold().getVin() + "|" + contract.getvehicleSold().getYear() + "|" + contract.getvehicleSold().getMake()
                         + "|" + contract.getvehicleSold().getModel() + "|" + contract.getvehicleSold().getVehicleType() + "|" + contract.getvehicleSold().getColor() + "|" + contract.getvehicleSold().getOdometer() + "|" + contract.getvehicleSold().getPrice() + "|"
                         + ((SalesContract) contract).getSalesTaxAmount() + "|" + ((SalesContract) contract).getvehicleSold() + "|" + ((SalesContract) contract).getProcessingFee() + "|" + contract.getTotalPrice() + "|" + ((SalesContract) contract).isFinanceOption() + contract.getMonthlyPayment());
+
             } else if (contract instanceof LeaseContract) {
                 writer.write("LEASE|" + contract.getContractDate() + "|" + contract.getCustomerName() + "|" + contract.getCustomerEmail() + "|" + contract.getvehicleSold().getVin() + "|" + contract.getvehicleSold().getYear() + "|" + contract.getvehicleSold().getMake()
                         + "|" + contract.getvehicleSold().getModel() + "|" + contract.getvehicleSold().getVehicleType() + "|" + contract.getvehicleSold().getColor() + "|" + contract.getvehicleSold().getOdometer() + "|" + contract.getvehicleSold().getPrice() + "|"
